@@ -10,8 +10,7 @@
     "mcp-chrome-stdio": "./dist/mcp/mcp-server-stdio.js"
   },
   "scripts": {
-    "start": "node dist/cli.js",
-    "postinstall": "node dist/scripts/postinstall.js"
+    "start": "node dist/cli.js"
   },
   "files": [
     "dist",
