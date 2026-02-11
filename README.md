@@ -146,7 +146,11 @@ chrome-mcp-server
 
 ## Acknowledgments
 
-This project is based on the excellent [mcp-chrome](https://github.com/hangwin/mcp-chrome) by [@hangye](https://github.com/hangwin). The original work provided the foundation for Chrome-MCP integration.
+This project is based on the excellent work by [@hangye](https://github.com/hangwin).
+
+**Original project:** [mcp-chrome](https://github.com/hangwin/mcp-chrome)
+
+The original work provided the foundation for Chrome-MCP integration.
 
 **Key contributions from the original project:**
 - Initial Chrome extension architecture
