@@ -35,7 +35,7 @@ function createServer(options = {}) {
               resources: { listChanged: true }
             },
             serverInfo: {
-              name: 'chrome-mcp-server',
+              name: 'chromecp',
               version: '1.0.29'
             }
           }

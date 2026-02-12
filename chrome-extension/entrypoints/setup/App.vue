@@ -3,7 +3,7 @@ import { ref, onMounted, onUnmounted } from 'vue';
 import { NATIVE_HOST } from '@/common/constants';
 
 const HOST_NAME = NATIVE_HOST.NAME;
-const NPM_PACKAGE = 'chrome-mcp-server';
+const NPM_PACKAGE = 'chromecp';
 
 const platform = ref<'windows' | 'mac' | 'linux'>('mac');
 const status = ref<'pending' | 'checking' | 'connected'>('pending');

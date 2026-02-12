@@ -1,36 +1,37 @@
-# Chrome MCP Server
+# ChromeCP
 
-A standalone Chrome MCP (Model Context Protocol) server with multi-session support, extracted from the excellent work by [@hangye](https://github.com/hangwin/mcp-chrome).
+A standalone Chrome MCP (Model Context Protocol) server with multi-session support and automatic setup guide.
+
+> **Fork of [mcp-chrome](https://github.com/hangwin/mcp-chrome) by [@hangye](https://github.com/hangwin)**
+> Enhanced with: automatic native host setup wizard, multi-session fix, and streamlined `npm install -g` workflow.
 
 ## Features
 
-- **Multi-Session Support**: Multiple MCP clients can connect simultaneously without conflicts (fixes the "Already connected to a transport" error)
+- **One-Command Install**: `npm install -g chromecp` — includes auto-setup guide for native messaging host
+- **Multi-Session Support**: Multiple MCP clients can connect simultaneously without conflicts
 - **Chrome Extension**: Full-featured browser extension for page interaction and automation
-- **Native Server**: FastAPI-based MCP server with both Streamable HTTP and SSE transport support
+- **Native Server**: MCP server with both Streamable HTTP and SSE transport support
 - **Session Management**: Database-backed session persistence with SQLite
-- **Agent Capabilities**: Integrated AI agents (Claude, Codex) for enhanced functionality
-
-## What's Included
-
-This repository contains two main components:
-
-- **`chrome-extension/`**: Browser extension with compiled Chrome MV3 build
-- **`native-server/`**: MCP server with multi-session capabilities
-- **`shared/`**: Common utilities and types (bundled inline)
 
 ## Installation
 
 ### Global Installation (Recommended)
 
 ```bash
-npm install -g chrome-mcp-server
+npm install -g chromecp
 ```
 
-### Local Installation
+Then run:
 
 ```bash
-git clone https://github.com/dddabtc/chrome-mcp-server.git
-cd chrome-mcp-server
+chromecp
+```
+
+### From Source
+
+```bash
+git clone https://github.com/dddabtc/chromecp.git
+cd chromecp
 npm install
 ```
 
@@ -40,46 +41,34 @@ npm install
 
 ```bash
 # Using global installation
-chrome-mcp-server
+chromecp
 
-# Or using the alternative command names
+# Alternative command names (backward compatible)
+chrome-mcp-server
 mcp-chrome-bridge
 chrome-mcp-bridge
 
-# For stdio mode
+# For stdio mode (Claude Desktop, etc.)
 mcp-chrome-stdio
 ```
-
-The server will start on the default port (typically 8080) and provide both:
-- Streamable HTTP MCP endpoint at `/mcp`
-- SSE (Server-Sent Events) transport
-- Native Chrome messaging host integration
 
 ### Chrome Extension Setup
 
 1. **Install the extension** in Chrome:
-   - Open Chrome and go to `chrome://extensions/`
-   - Enable "Developer mode" in the top right
+   - Open `chrome://extensions/`
+   - Enable "Developer mode"
    - Click "Load unpacked"
    - Select the `chrome-extension/.output/chrome-mv3` directory
 
-2. **Automatic Native Host Detection**:
-   - On first load, the extension automatically checks if the native messaging host is registered
-   - If not registered, a **setup guide page** will open automatically
-   - Download the install script for your platform:
-     - **Windows**: `install-host.bat`
-     - **macOS / Linux**: `install-host.sh`
-   - Run the script — it handles native host installation and Chrome registry/manifest registration in one step
-   - Once complete, reload the extension and it will connect automatically
+2. **Automatic Native Host Setup**:
+   - On first load, a **setup guide page** opens automatically
+   - Download the install script for your platform (Windows `.bat` / macOS+Linux `.sh`)
+   - Run it — handles native host registration in one step
+   - Reload the extension and it connects automatically
 
 ### Configuration
 
-The server can be configured through environment variables or command line arguments. See the native-server documentation for detailed configuration options.
-
-Create a `.env` file for environment-specific settings:
-
 ```env
-# Example configuration
 CHROME_MCP_PORT=8080
 CHROME_CDP_PORT=9222
 LOG_LEVEL=info
@@ -87,14 +76,7 @@ LOG_LEVEL=info
 
 ## Multi-Session Support
 
-This implementation includes Howard's multi-session fix ([PR #295](https://github.com/hangwin/mcp-chrome/pull/295)) which allows multiple MCP clients to connect to the same server instance simultaneously. This resolves the original limitation where only one client could connect at a time.
-
-### How it Works
-
-- Each MCP client gets a unique session ID
-- Transport connections are managed in a Map structure
-- Both StreamableHTTP and SSE transports can be used concurrently
-- Session state is persisted to SQLite database
+Includes Howard's multi-session fix ([PR #295](https://github.com/hangwin/mcp-chrome/pull/295)) — multiple MCP clients can connect to the same server simultaneously.
 
 ## Architecture
 
@@ -103,77 +85,15 @@ Chrome Extension (Browser)
     ↕
 Native Messaging Host
     ↕
-MCP Server (FastAPI)
+MCP Server (chromecp)
     ↕
 MCP Clients (Claude, etc.)
 ```
 
-The server acts as a bridge between Chrome's native messaging system and MCP clients, enabling AI agents to interact with web pages through the browser extension.
-
-## Development
-
-### Building from Source
-
-```bash
-# Install dependencies
-npm install
-
-# Build the native server
-cd native-server
-npm run build
-
-# Build the chrome extension  
-cd chrome-extension
-npm run build
-```
-
-### Testing
-
-```bash
-# Run tests for native server
-cd native-server
-npm test
-```
-
-## Troubleshooting
-
-### Common Issues
-
-1. **Connection Refused**: Ensure the native server is running and Chrome has the correct port configuration
-2. **Extension Not Loading**: Check that Chrome Developer Mode is enabled and the extension path is correct
-3. **Multi-Session Conflicts**: This implementation should handle multiple clients gracefully - if you encounter issues, check the server logs
-
-### Debugging
-
-Enable debug logging by setting:
-```bash
-export LOG_LEVEL=debug
-chrome-mcp-server
-```
-
 ## Acknowledgments
 
-This project is based on the excellent work by [@hangye](https://github.com/hangwin).
-
-**Original project:** [mcp-chrome](https://github.com/hangwin/mcp-chrome)
-
-The original work provided the foundation for Chrome-MCP integration.
-
-**Key contributions from the original project:**
-- Initial Chrome extension architecture
-- Native messaging host implementation  
-- MCP protocol integration
-- Browser automation capabilities
-
-**Multi-session enhancement by Howard:**
-- Fixed transport connection management
-- Added support for concurrent MCP clients
-- Database-backed session persistence
+Based on the excellent work by [@hangye](https://github.com/hangwin) — [mcp-chrome](https://github.com/hangwin/mcp-chrome).
 
 ## License
 
-MIT License - see LICENSE file for details.
-
-## Contributing
-
-Issues and pull requests are welcome! Please ensure any contributions maintain compatibility with the MCP specification and Chrome extension requirements.
+MIT

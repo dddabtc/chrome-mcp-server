@@ -12,7 +12,7 @@ function createMcpServer(options = {}) {
   
   const server = new Server(
     {
-      name: "chrome-mcp-server",
+      name: "chromecp",
       version: "1.0.29"
     },
     {
