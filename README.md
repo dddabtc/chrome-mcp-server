@@ -57,13 +57,20 @@ The server will start on the default port (typically 8080) and provide both:
 
 ### Chrome Extension Setup
 
-1. Load the extension in Chrome:
+1. **Install the extension** in Chrome:
    - Open Chrome and go to `chrome://extensions/`
    - Enable "Developer mode" in the top right
    - Click "Load unpacked"
    - Select the `chrome-extension/.output/chrome-mv3` directory
 
-2. Configure the extension to connect to your MCP server endpoint
+2. **Automatic Native Host Detection**:
+   - On first load, the extension automatically checks if the native messaging host is registered
+   - If not registered, a **setup guide page** will open automatically
+   - Download the install script for your platform:
+     - **Windows**: `install-host.bat`
+     - **macOS / Linux**: `install-host.sh`
+   - Run the script — it handles native host installation and Chrome registry/manifest registration in one step
+   - Once complete, reload the extension and it will connect automatically
 
 ### Configuration
 
