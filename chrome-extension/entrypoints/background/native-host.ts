@@ -26,6 +26,7 @@ let ensurePromise: Promise<boolean> | null = null;
 let reconnectTimer: ReturnType<typeof setTimeout> | null = null;
 let reconnectAttempts = 0;
 let manualDisconnect = false;
+let setupPageOpened = false;
 
 /**
  * Server status management interface
@@ -438,11 +439,23 @@ export function connectNativeHost(port: number = NATIVE_HOST.DEFAULT_PORT): bool
     });
 
     nativePort.onDisconnect.addListener(() => {
-      console.warn(ERROR_MESSAGES.NATIVE_DISCONNECTED, chrome.runtime.lastError);
+      const lastError = chrome.runtime.lastError;
+      console.warn(ERROR_MESSAGES.NATIVE_DISCONNECTED, lastError);
       nativePort = null;
 
       // Mark server as stopped since native host disconnection means server is down
       void markServerStopped('native_port_disconnected');
+
+      // If native host is not found, open setup guide page (once per session)
+      const errorMsg = lastError?.message || '';
+      if (!setupPageOpened && errorMsg.includes('not found')) {
+        setupPageOpened = true;
+        chrome.tabs.create({
+          url: chrome.runtime.getURL('/setup.html'),
+        }).catch((err) => {
+          console.warn(`${LOG_PREFIX} Failed to open setup page:`, err);
+        });
+      }
 
       // Handle reconnection based on disconnect reason
       if (manualDisconnect) {
