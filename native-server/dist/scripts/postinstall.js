@@ -158,9 +158,13 @@ async function tryRegisterNativeHost() {
             }
         }
         else {
-            // Local installation mode, don't attempt automatic registration
-            console.log((0, utils_1.colorText)('Local installation detected, skipping automatic registration', 'yellow'));
-            printManualInstructions();
+            // Local installation mode - still attempt user-level registration automatically
+            console.log((0, utils_1.colorText)('Local installation detected, attempting user-level registration...', 'blue'));
+            const userLevelSuccess = await (0, utils_1.tryRegisterUserLevelHost)();
+            if (!userLevelSuccess) {
+                console.log((0, utils_1.colorText)('Automatic registration failed. You can register manually:', 'yellow'));
+                printManualInstructions();
+            }
         }
     }
     catch (error) {
@@ -226,14 +230,8 @@ async function main() {
     await ensureExecutionPermissions();
     // Write Node.js path for run_host scripts to use
     (0, utils_1.writeNodePathFile)(path_1.default.join(__dirname, '..'));
-    // If global installation, try automatic registration
-    if (isGlobalInstall) {
-        await tryRegisterNativeHost();
-    }
-    else {
-        console.log((0, utils_1.colorText)('Local installation detected', 'yellow'));
-        printManualInstructions();
-    }
+    // Always try automatic registration (both global and local installs)
+    await tryRegisterNativeHost();
 }
 // Only execute main function when running this script directly
 if (isDirectRun) {
